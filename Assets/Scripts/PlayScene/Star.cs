@@ -2,55 +2,62 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Star : MonoBehaviour
+namespace StarSeeker.GameScene
 {
-    public float jumpHeight = 1;
-
-    private Rigidbody2D rigidbody2D;
-    private bool jumping = false;
-
-    // Start is called before the first frame update
-    private void Start()
+    public class Star : MonoBehaviour
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        StartCoroutine("MoveStar");
-    }
+        [SerializeField] private float jumpHeight = 1;
 
-    // Update is called once per frame
-    private void Update()
-    {
-       
-    }
+        private Rigidbody2D rigidbody2D;
+        private bool jumping = false;
 
-    private IEnumerator MoveStar()
-    {
-        while (gameObject.activeSelf)
+        // Start is called before the first frame update
+        private void Start()
         {
-            if (Input.GetMouseButton(0))
-            {
-                if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x < -0.05)
-                {
-                    transform.Translate(Vector2.left * Time.deltaTime);
-                }
-                else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x > 0.05)
-                {
-                    transform.Translate(Vector2.right * Time.deltaTime);
-                }
-            }
-            yield return null;
+            rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidbody2D.freezeRotation = true;
+            StartCoroutine("MoveStar");
         }
-    }
 
-    private void JumpStar()
-    {
-        jumping = true;
-        rigidbody2D.AddForce(Vector2.up * jumpHeight * 100);
-        jumping = false;
-    }
+        // Update is called once per frame
+        private void Update()
+        {
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Block" && !jumping)
-            JumpStar();
+        }
+
+        private IEnumerator MoveStar()
+        {
+            while (gameObject.activeSelf)
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x < -0.05)
+                    {
+                        transform.Translate(Vector2.left * Time.deltaTime);
+                    }
+                    else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x > 0.05)
+                    {
+                        transform.Translate(Vector2.right * Time.deltaTime);
+                    }
+                }
+                yield return null;
+            }
+        }
+
+        private void JumpStar()
+        {
+            jumping = true;
+            rigidbody2D.velocity = (Vector2.up * jumpHeight);
+            jumping = false;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Block" && !jumping)
+            {
+                JumpStar();
+                collision.gameObject.SendMessage("CheckHP");
+            }
+        }
     }
 }

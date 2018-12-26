@@ -2,20 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+namespace StarSeeker.GameScene
 {
-    // Start is called before the first frame update
-    private void Start()
+    public class Block : MonoBehaviour
     {
-        StartCoroutine("MoveBlock");
-    }
+        private int HP;
 
-    private IEnumerator MoveBlock()
-    {
-        while (transform.position.y < 6)
+        // Start is called before the first frame update
+        private void Start()
         {
-            transform.Translate(Vector2.up * Time.deltaTime);
+            StartCoroutine("MoveBlock");
+            
+            HP = Random.Range(1, 10);
+            if (Random.Range(0,2) == 0)
+            {
+                HP = GameManager.Instance.GetStage();
+            }
+        }
+
+        private IEnumerator MoveBlock()
+        {
+            while (transform.position.y < 6)
+            {
+                transform.Translate(Vector2.up * Time.deltaTime);
+                yield return null;
+            }
+            Destroy(gameObject);
             yield return null;
         }
+
+        private void CheckHP()
+        {
+            if (HP <= 0)
+                Destroy(gameObject);
+        }
     }
+
 }
