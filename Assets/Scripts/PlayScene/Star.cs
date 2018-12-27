@@ -10,11 +10,12 @@ namespace StarSeeker.GameScene
 
         private Rigidbody2D rigidbody2D;
         private bool jumping = false;
+        private List<GameObject> babyStars;
 
         // Start is called before the first frame update
         private void Start()
         {
-            rigidbody2D = GetComponent<Rigidbody2D>();
+            rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.freezeRotation = true;
             StartCoroutine("MoveStar");
         }

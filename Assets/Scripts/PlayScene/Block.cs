@@ -7,17 +7,21 @@ namespace StarSeeker.GameScene
     public class Block : MonoBehaviour
     {
         private int HP;
-
+        private int firstHP;
+        Color blockColor;
+        
         // Start is called before the first frame update
         private void Start()
-        {
+        { 
             StartCoroutine("MoveBlock");
             
             HP = Random.Range(1, 10);
             if (Random.Range(0,2) == 0)
             {
-                HP = GameManager.Instance.GetStage();
+                HP += GameManager.Instance.GetStage();
             }
+            firstHP = HP;
+            blockColor = gameObject.GetComponent<SpriteRenderer>().color;
         }
 
         private IEnumerator MoveBlock()
@@ -27,12 +31,16 @@ namespace StarSeeker.GameScene
                 transform.Translate(Vector2.up * Time.deltaTime);
                 yield return null;
             }
+            
             Destroy(gameObject);
             yield return null;
         }
 
         private void CheckHP()
         {
+            HP--;
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(blockColor.r, blockColor.g, blockColor.b, ((float)HP / (float)firstHP));
+
             if (HP <= 0)
                 Destroy(gameObject);
         }
