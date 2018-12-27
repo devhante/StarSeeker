@@ -11,7 +11,7 @@ namespace StarSeeker.Components
 		private Text text;
 
 		[SerializeField]
-		private string sceneTitle;
+		private readonly string sceneTitle;
 
 		private void Start()
 		{
