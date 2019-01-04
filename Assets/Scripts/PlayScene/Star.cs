@@ -41,23 +41,33 @@ namespace StarSeeker.GameScene
                         transform.Translate(Vector2.right * Time.deltaTime);
                     }
                 }
+                if (transform.position.y < -4.7f && !jumping)
+                    StartCoroutine("JumpStar");
                 yield return null;
             }
         }
 
-        private void JumpStar()
+        private IEnumerator JumpStar()
         {
             jumping = true;
             rigidbody2D.velocity = (Vector2.up * jumpHeight);
+            yield return null;
             jumping = false;
+            yield return null;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.tag == "Block" && !jumping)
             {
-                JumpStar();
+                StartCoroutine("JumpStar");
                 collision.gameObject.SendMessage("CheckHP");
+            }
+
+            else if(collision.gameObject.tag == "Floor")
+            {
+                GameManager.Instance.SendMessage("GameOver");
+                Destroy(gameObject);
             }
         }
     }

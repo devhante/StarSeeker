@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Star
   - Block
+  - Floor
   layers:
   - Default
   - TransparentFX

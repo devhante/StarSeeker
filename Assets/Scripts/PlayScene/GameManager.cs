@@ -22,6 +22,7 @@ namespace StarSeeker.GameScene
         [SerializeField] private float blockMakeTerm;
 
         private int stage;
+        private bool gameover = false;
 
         // Start is called before the first frame update
         private void Start()
@@ -38,7 +39,7 @@ namespace StarSeeker.GameScene
 
         private IEnumerator MakeBlock()
         {
-            while (true)
+            while (!gameover)
             {
                 for (float i = -2.44f; i < 2.5f; i += 0.7f)
                     Instantiate(block, new Vector2(i, -5), Quaternion.Euler(0, 0, 0));
@@ -48,9 +49,19 @@ namespace StarSeeker.GameScene
             }
         }
         
+        private void GameOver()
+        {
+            gameover = true; 
+        }
+
         public int GetStage()
         {
             return stage;
+        }
+
+        public bool GetGameOVer()
+        {
+            return gameover;
         }
     }
 }

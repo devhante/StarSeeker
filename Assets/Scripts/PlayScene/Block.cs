@@ -22,11 +22,12 @@ namespace StarSeeker.GameScene
             }
             firstHP = HP;
             blockColor = gameObject.GetComponent<SpriteRenderer>().color;
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(blockColor.r, blockColor.g, blockColor.b, (HP / (10f + GameManager.Instance.GetStage())));
         }
 
         private IEnumerator MoveBlock()
         {
-            while (transform.position.y < 6)
+            while (transform.position.y < 6 && !GameManager.Instance.GetGameOVer())
             {
                 transform.Translate(Vector2.up * Time.deltaTime);
                 yield return null;
@@ -39,7 +40,7 @@ namespace StarSeeker.GameScene
         private void CheckHP()
         {
             HP--;
-            gameObject.GetComponent<SpriteRenderer>().color = new Color(blockColor.r, blockColor.g, blockColor.b, ((float)HP / (float)firstHP));
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(blockColor.r, blockColor.g, blockColor.b, (HP / (10f + GameManager.Instance.GetStage())));
 
             if (HP <= 0)
                 Destroy(gameObject);
