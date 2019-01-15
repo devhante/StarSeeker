@@ -790,5 +790,15 @@ PrefabInstance:
       propertyPath: jumpHeight
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8942162002487252897, guid: 69401668152315344946412ff49339ad,
+        type: 3}
+      propertyPath: skillSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8942162002487252897, guid: 69401668152315344946412ff49339ad,
+        type: 3}
+      propertyPath: demandEnergy
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69401668152315344946412ff49339ad, type: 3}

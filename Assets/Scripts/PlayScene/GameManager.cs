@@ -6,7 +6,7 @@ namespace StarSeeker.GameScene
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance;
+        public static GameManager Instance; // 싱글턴 패턴
 
         private void OnDestroy()
         {
@@ -18,11 +18,11 @@ namespace StarSeeker.GameScene
             Instance = this;
         }
 
-        [SerializeField] private GameObject block;
-        [SerializeField] private float blockMakeTerm;
+        [SerializeField] private GameObject block;      // 자동으로 생성할 블럭 프리팹
+        [SerializeField] private float blockMakeTerm;   // 블럭이 자동으로 생성되는 주기
 
-        private int stage;
-        private bool gameover = false;
+        private int stage;                              // 스테이지 [블럭들이 나올수록 증가] 
+        private bool gameover = false;                  // 게임오버 [게임오버가 되면 게임 중지]
 
         // Start is called before the first frame update
         private void Start()
@@ -37,7 +37,7 @@ namespace StarSeeker.GameScene
 
         }
 
-        private IEnumerator MakeBlock()
+        private IEnumerator MakeBlock() // blockMakeTerm을 주기로 block프리팹을 자동으로 생성 
         {
             while (!gameover)
             {
@@ -49,17 +49,17 @@ namespace StarSeeker.GameScene
             }
         }
         
-        private void GameOver()
+        private void GameOver()     // 게임오버를 참으로 변경
         {
             gameover = true; 
         }
 
-        public int GetStage()
+        public int GetStage()       // 스테이지 반환
         {
             return stage;
         }
 
-        public bool GetGameOVer()
+        public bool GetGameOVer()   // 게임오버 반환
         {
             return gameover;
         }

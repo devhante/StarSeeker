@@ -6,11 +6,15 @@ namespace StarSeeker.GameScene
 {
     public class Star : MonoBehaviour
     {
-        [SerializeField] private float jumpHeight = 1;
+        [SerializeField] private float jumpHeight;      // 얼마나 높이 점프하는지
+        [SerializeField] private float skillSpeed;      // 스킬이 사용시 얼마나 빨리 떨어지는지
+        [SerializeField] private int demandEnergy;    // 스킬을 사용하는데 필요한 에너지
 
-        private Rigidbody2D rigidbody2D;
-        private bool jumping = false;
-        private List<GameObject> babyStars;
+        private Rigidbody2D rigidbody2D;            // 각종 물리연산
+        private bool jumping = false;               // 점프하는지 체크
+        private bool usingSkill = false;                    // 스킬 사용중인지 체크
+        private int skillEnergy = 0;                    // 에너지가 다차면 스킬 사용가능
+        
 
         // Start is called before the first frame update
         private void Start()
@@ -18,15 +22,10 @@ namespace StarSeeker.GameScene
             rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
             rigidbody2D.freezeRotation = true;
             StartCoroutine("MoveStar");
+            StartCoroutine("CrushBlock");
         }
 
-        // Update is called once per frame
-        private void Update()
-        {
-
-        }
-
-        private IEnumerator MoveStar()
+        private IEnumerator MoveStar()  // 터치하는 방향으로 이동
         {
             while (gameObject.activeSelf)
             {
@@ -56,15 +55,48 @@ namespace StarSeeker.GameScene
             yield return null;
         }
 
+        private IEnumerator CrushBlock()    // 스킬게이지가 다차고 더블클릭하면 스킬 사용
+        {
+            bool clicking = false;
+            float clickTime = 0;
+
+            while (gameObject.activeSelf)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (!clicking)
+                    {
+                        clickTime = Time.time;
+                        clicking = true;
+                    }
+                else if (clickTime + 0.5f <= Time.time && skillEnergy >= demandEnergy)
+                {
+                    rigidbody2D.velocity = (Vector2.down) * skillSpeed;
+                    usingSkill = true;
+                    clicking = false;
+                    skillEnergy -= demandEnergy;
+                }
+                }
+                yield return null;
+            }
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.tag == "Block" && !jumping)
+            if (usingSkill)
+            {
+                collision.gameObject.SendMessage("CrushBlock");
+                usingSkill = false;
+            }
+
+            else if (collision.gameObject.tag == "Block" && !jumping)    // 점프하는 중이 아니고 블럭에 닿으면 점프
             {
                 StartCoroutine("JumpStar");
                 collision.gameObject.SendMessage("CheckHP");
+                skillEnergy++;
             }
 
-            else if(collision.gameObject.tag == "Floor")
+            else if(collision.gameObject.tag == "Floor")            // 천장에 닿으면 게임오버
             {
                 GameManager.Instance.SendMessage("GameOver");
                 Destroy(gameObject);
