@@ -8,6 +8,7 @@ namespace StarSeeker.GameScene
     public class PlaySceneUI : MonoBehaviour
     {
         [SerializeField] private Text StageText;    // 나타내는 스테이지
+        [SerializeField] private Text energyText;   // 나타내는 스테이지
 
         // Start is called before the first frame update
         void Start()
@@ -19,6 +20,7 @@ namespace StarSeeker.GameScene
         void Update()
         {
             StageText.text = "바닥 수 : " + GameManager.Instance.GetStage();
+            energyText.text = "에너지 : " + GameManager.Instance.Energy;
         }
     }
 }

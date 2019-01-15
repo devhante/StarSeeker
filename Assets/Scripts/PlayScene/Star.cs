@@ -14,7 +14,7 @@ namespace StarSeeker.GameScene
         private bool jumping = false;               // 점프하는지 체크
         private bool usingSkill = false;                    // 스킬 사용중인지 체크
         private int skillEnergy = 0;                    // 에너지가 다차면 스킬 사용가능
-        
+
 
         // Start is called before the first frame update
         private void Start()
@@ -64,18 +64,19 @@ namespace StarSeeker.GameScene
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (!clicking)
+                    if (!clicking || clickTime + 1f < Time.time)
                     {
                         clickTime = Time.time;
                         clicking = true;
                     }
-                else if (clickTime + 0.5f <= Time.time && skillEnergy >= demandEnergy)
-                {
-                    rigidbody2D.velocity = (Vector2.down) * skillSpeed;
-                    usingSkill = true;
-                    clicking = false;
-                    skillEnergy -= demandEnergy;
-                }
+                    else if (clickTime + 0.3f >= Time.time && skillEnergy >= demandEnergy)
+                    {
+                        rigidbody2D.velocity = (Vector2.down) * skillSpeed;
+                        usingSkill = true;
+                        clicking = false;
+                        skillEnergy -= demandEnergy;
+                        GameManager.Instance.Energy = skillEnergy;
+                    }
                 }
                 yield return null;
             }
@@ -94,9 +95,10 @@ namespace StarSeeker.GameScene
                 StartCoroutine("JumpStar");
                 collision.gameObject.SendMessage("CheckHP");
                 skillEnergy++;
+                GameManager.Instance.Energy = skillEnergy;
             }
 
-            else if(collision.gameObject.tag == "Floor")            // 천장에 닿으면 게임오버
+            else if (collision.gameObject.tag == "Floor")            // 천장에 닿으면 게임오버
             {
                 GameManager.Instance.SendMessage("GameOver");
                 Destroy(gameObject);

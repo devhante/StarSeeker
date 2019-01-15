@@ -23,6 +23,12 @@ namespace StarSeeker.GameScene
 
         private int stage;                              // 스테이지 [블럭들이 나올수록 증가] 
         private bool gameover = false;                  // 게임오버 [게임오버가 되면 게임 중지]
+        private int energy = 0;                         // 스킬 사용할 때 쓰이는 에너지
+        public int Energy                             
+        {
+            get { return energy; }
+            set { energy = value; }
+        }
 
         // Start is called before the first frame update
         private void Start()
@@ -49,6 +55,11 @@ namespace StarSeeker.GameScene
             }
         }
         
+        private void SetEnergy()
+        {
+
+        }
+
         private void GameOver()     // 게임오버를 참으로 변경
         {
             gameover = true; 
