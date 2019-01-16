@@ -84,7 +84,7 @@ namespace StarSeeker.GameScene
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (usingSkill)
+            if (collision.gameObject.tag == "Block" && usingSkill)  // 스킬 사용 후 닿는 블럭 파괴
             {
                 collision.gameObject.SendMessage("CrushBlock");
                 usingSkill = false;
@@ -102,6 +102,15 @@ namespace StarSeeker.GameScene
             {
                 GameManager.Instance.SendMessage("GameOver");
                 Destroy(gameObject);
+            }
+        }
+
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Block" && usingSkill)  // 스킬 사용 후 닿는 블럭 파괴
+            {
+                collision.gameObject.SendMessage("CrushBlock");
+                usingSkill = false;
             }
         }
     }
