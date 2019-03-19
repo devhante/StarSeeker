@@ -18,7 +18,7 @@ namespace StarSeeker.GameScene
             Instance = this;
         }
 
-        [SerializeField] private GameObject block;      // 자동으로 생성할 블럭 프리팹
+        [SerializeField] private GameObject blocks;      // 자동으로 생성할 블럭 프리팹
         [SerializeField] private float blockMakeTerm;   // 블럭이 자동으로 생성되는 주기
 
         private int stage;                              // 스테이지 [블럭들이 나올수록 증가] 
@@ -47,8 +47,7 @@ namespace StarSeeker.GameScene
         {
             while (!gameover)
             {
-                for (float i = -2.44f; i < 2.5f; i += 0.7f)
-                    Instantiate(block, new Vector2(i, -5), Quaternion.Euler(0, 0, 0));
+                Instantiate(blocks, new Vector2(0, -5), Quaternion.identity);
 
                 stage++;
                 yield return new WaitForSeconds(blockMakeTerm);

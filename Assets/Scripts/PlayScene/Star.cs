@@ -9,6 +9,7 @@ namespace StarSeeker.GameScene
         [SerializeField] private float jumpHeight;      // 얼마나 높이 점프하는지
         [SerializeField] private float skillSpeed;      // 스킬이 사용시 얼마나 빨리 떨어지는지
         [SerializeField] private int demandEnergy;    // 스킬을 사용하는데 필요한 에너지
+        [SerializeField] private float moveSpeed;
 
         private Rigidbody2D rigidbody2D;            // 각종 물리연산
         private bool jumping = false;               // 점프하는지 체크
@@ -33,11 +34,11 @@ namespace StarSeeker.GameScene
                 {
                     if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x < -0.05)
                     {
-                        transform.Translate(Vector2.left * Time.deltaTime);
+                        transform.Translate(Vector2.left * Time.deltaTime * moveSpeed);
                     }
                     else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x > 0.05)
                     {
-                        transform.Translate(Vector2.right * Time.deltaTime);
+                        transform.Translate(Vector2.right * Time.deltaTime * moveSpeed);
                     }
                 }
                 if (transform.position.y < -4.7f && !jumping)
